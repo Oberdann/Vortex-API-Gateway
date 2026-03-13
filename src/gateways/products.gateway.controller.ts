@@ -24,6 +24,14 @@ export class ProductsGatewayController {
     return response.data;
   }
 
+  @Get('/testeCache')
+  async getProductsTestCache() {
+    const response = await firstValueFrom(
+      this.httpService.get(process.env.PRODUCTS_SERVICE_URL + '/products'),
+    );
+    return response.data;
+  }
+
   @Get(':id')
   async getProductById(@Param('id') id: string) {
     const response = await firstValueFrom(
