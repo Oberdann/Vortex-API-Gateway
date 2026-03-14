@@ -22,7 +22,7 @@ export class ProductsGatewayController {
   @Get()
   async getProducts() {
     const response = await firstValueFrom(
-      this.httpService.get(process.env.PRODUCTS_SERVICE_URL + '/products'),
+      this.httpService.get(`${process.env.PRODUCTS_SERVICE_URL}/products`),
     );
     return response.data;
   }
@@ -31,7 +31,7 @@ export class ProductsGatewayController {
   async getProductById(@Param('id') id: string) {
     const response = await firstValueFrom(
       this.httpService.get(
-        process.env.PRODUCTS_SERVICE_URL + `/products/${id}`,
+        `${process.env.PRODUCTS_SERVICE_URL}/products/${id}`,
       ),
     );
     return response.data;
@@ -41,7 +41,7 @@ export class ProductsGatewayController {
   async createProduct(@Body() body: CreateProductDto) {
     const response = await firstValueFrom(
       this.httpService.post(
-        process.env.PRODUCTS_SERVICE_URL + '/products',
+        `${process.env.PRODUCTS_SERVICE_URL}/products`,
         body,
       ),
     );
@@ -52,7 +52,7 @@ export class ProductsGatewayController {
   async updateProduct(@Param('id') id: string, @Body() body: UpdateProductDto) {
     const response = await firstValueFrom(
       this.httpService.put(
-        process.env.PRODUCTS_SERVICE_URL + `/products/${id}`,
+        `${process.env.PRODUCTS_SERVICE_URL}/products/${id}`,
         body,
       ),
     );
@@ -63,7 +63,7 @@ export class ProductsGatewayController {
   async deleteProduct(@Param('id') id: string) {
     const response = await firstValueFrom(
       this.httpService.delete(
-        process.env.PRODUCTS_SERVICE_URL + `/products/${id}`,
+        `${process.env.PRODUCTS_SERVICE_URL}/products/${id}`,
       ),
     );
     return response.data;
