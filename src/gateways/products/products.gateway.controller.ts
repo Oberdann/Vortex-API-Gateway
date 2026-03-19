@@ -11,6 +11,8 @@ import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { UpdateProductDto } from './dtos/input/update-product-dto';
 import { CreateProductDto } from './dtos/input/create-product-dto';
+import { AddCategoriesToProductDto } from './dtos/input/add-categories-to-product';
+import { RemoveCategoriesFromProductDto } from './dtos/input/remove-categorires-from-product';
 
 @Controller('products')
 export class ProductsGatewayController {
@@ -50,6 +52,34 @@ export class ProductsGatewayController {
     const response = await firstValueFrom(
       this.httpService.put(
         `${process.env.PRODUCTS_SERVICE_URL}/products/${id}`,
+        body,
+      ),
+    );
+    return response.data;
+  }
+
+  @Put(':id/categories/add')
+  async addCategoriesToProduct(
+    @Param('id') id: string,
+    @Body() body: AddCategoriesToProductDto,
+  ) {
+    const response = await firstValueFrom(
+      this.httpService.put(
+        `${process.env.PRODUCTS_SERVICE_URL}/products/${id}/categories/add`,
+        body,
+      ),
+    );
+    return response.data;
+  }
+
+  @Put(':id/categories/remove')
+  async removeCategoriesFromProduct(
+    @Param('id') id: string,
+    @Body() body: RemoveCategoriesFromProductDto,
+  ) {
+    const response = await firstValueFrom(
+      this.httpService.put(
+        `${process.env.PRODUCTS_SERVICE_URL}/products/${id}/categories/remove`,
         body,
       ),
     );
