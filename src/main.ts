@@ -1,12 +1,14 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
+
+import './observability/instrumentation';
+
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import * as dotenv from 'dotenv';
 import { ValidationPipe } from '@nestjs/common';
 import { ExceptionGlobalFilter } from './common/filters/exception-global-filter';
 import { AxiosErrorInterceptor } from './common/filters/axios-error-interceptor';
-
-dotenv.config();
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
