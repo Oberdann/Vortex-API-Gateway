@@ -11,6 +11,7 @@ import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { CreateUserDto } from './dtos/input/create-user-dto';
 import { UpdateUserDto } from './dtos/input/update-user-dto';
+import { Auth } from 'src/common/decorators/auth-decorator';
 
 @Controller('users')
 export class UsersGatewayController {
@@ -25,6 +26,7 @@ export class UsersGatewayController {
   }
 
   @Get(':id')
+  @Auth()
   async getUserById(@Param('id') id: string) {
     const response = await firstValueFrom(
       this.httpService.get(`${process.env.USERS_SERVICE_URL}/users/${id}`),
@@ -33,6 +35,7 @@ export class UsersGatewayController {
   }
 
   @Post()
+  @Auth(['ADMIN'])
   async createUser(@Body() createDto: CreateUserDto) {
     const response = await firstValueFrom(
       this.httpService.post(
