@@ -1,5 +1,5 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { Role } from '../enums/user-roles';
+import { UserRoles } from '../enums/user-roles';
 import { JwtPayload } from '../interfaces/jwt-payload';
 import { Reflector } from '@nestjs/core';
 
@@ -8,7 +8,7 @@ export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
-    const requiredRoles = this.reflector.get<Role[]>(
+    const requiredRoles = this.reflector.get<UserRoles[]>(
       'roles',
       context.getHandler(),
     );
@@ -18,10 +18,12 @@ export class RolesGuard implements CanActivate {
 
     if (!user || !user.roles) return false;
 
-    if (user.roles.includes(Role.ADMIN)) return true;
+    if (user.roles.includes(UserRoles.ADMIN)) return true;
 
-    const rolesToCheck: Role[] =
-      requiredRoles && requiredRoles.length > 0 ? requiredRoles : [Role.USER];
+    const rolesToCheck: UserRoles[] =
+      requiredRoles && requiredRoles.length > 0
+        ? requiredRoles
+        : [UserRoles.USER];
 
     return rolesToCheck.some((role) => user.roles.includes(role));
   }
