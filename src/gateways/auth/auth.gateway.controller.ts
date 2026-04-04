@@ -12,7 +12,7 @@ export class AuthGatewayController {
   async register(@Body() registerDto: RegisterDto) {
     const response = await firstValueFrom(
       this.httpService.post(
-        `http://localhost:3001/api/v1/auth/register`,
+        `${process.env.AUTH_SERVICE_URL}/register`,
         registerDto,
       ),
     );
@@ -22,10 +22,7 @@ export class AuthGatewayController {
   @Post('login')
   async login(@Body() loginDto: LoginDto) {
     const response = await firstValueFrom(
-      this.httpService.post(
-        `http://localhost:3001/api/v1/auth/login`,
-        loginDto,
-      ),
+      this.httpService.post(`${process.env.AUTH_SERVICE_URL}/login`, loginDto),
     );
     return response.data;
   }
