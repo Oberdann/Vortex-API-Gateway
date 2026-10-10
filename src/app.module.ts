@@ -8,6 +8,8 @@ import { AuthGatewayController } from './gateways/auth/auth.gateway.controller';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './common/strategies/jwt-strategy';
+import { ProductsStockService } from './gateways/products/products-stock.service';
+import { StockGatewayController } from './gateways/stock/stock.gateway.controller';
 @Module({
   imports: [
     HttpModule,
@@ -23,7 +25,8 @@ import { JwtStrategy } from './common/strategies/jwt-strategy';
     ProductsGatewayController,
     CategoriesGatewayController,
     UsersGatewayController,
+    StockGatewayController,
   ],
-  providers: [JwtStrategy],
+  providers: [JwtStrategy, ProductsStockService],
 })
 export class AppModule {}
