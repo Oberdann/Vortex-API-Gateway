@@ -24,7 +24,7 @@ export class ProductsGatewayController {
   constructor(
     private readonly httpService: HttpService,
     private readonly productsStockService: ProductsStockService,
-  ) { }
+  ) {}
 
   @Get()
   async getProducts() {
@@ -53,28 +53,26 @@ export class ProductsGatewayController {
 
   @Post()
   async createProduct(@Body() body: CreateProductDto) {
-    const productServiceResponse = await firstValueFrom(
+    const response = await firstValueFrom(
       this.httpService.post(
         `${process.env.PRODUCTS_SERVICE_URL}/products`,
         body,
       ),
     );
-    const response = await this.addStockToResponse(productServiceResponse);
 
-    return response;
+    return response.data;
   }
 
   @Put(':id')
   async updateProduct(@Param('id') id: string, @Body() body: UpdateProductDto) {
-    const productServiceResponse = await firstValueFrom(
+    const response = await firstValueFrom(
       this.httpService.put(
         `${process.env.PRODUCTS_SERVICE_URL}/products/${id}`,
         body,
       ),
     );
-    const response = await this.addStockToResponse(productServiceResponse);
 
-    return response;
+    return response.data;
   }
 
   @Put(':id/categories/add')
@@ -82,15 +80,14 @@ export class ProductsGatewayController {
     @Param('id') id: string,
     @Body() body: AddCategoriesToProductDto,
   ) {
-    const productServiceResponse = await firstValueFrom(
+    const response = await firstValueFrom(
       this.httpService.put(
         `${process.env.PRODUCTS_SERVICE_URL}/products/${id}/categories/add`,
         body,
       ),
     );
-    const response = await this.addStockToResponse(productServiceResponse);
 
-    return response;
+    return response.data;
   }
 
   @Put(':id/categories/remove')
@@ -98,15 +95,14 @@ export class ProductsGatewayController {
     @Param('id') id: string,
     @Body() body: RemoveCategoriesFromProductDto,
   ) {
-    const productServiceResponse = await firstValueFrom(
+    const response = await firstValueFrom(
       this.httpService.put(
         `${process.env.PRODUCTS_SERVICE_URL}/products/${id}/categories/remove`,
         body,
       ),
     );
-    const response = await this.addStockToResponse(productServiceResponse);
 
-    return response;
+    return response.data;
   }
 
   @Delete(':id')
