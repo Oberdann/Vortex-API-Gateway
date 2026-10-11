@@ -1,21 +1,23 @@
 import {
   Controller,
   Get,
-  Post,
   Put,
   Delete,
   Param,
   Body,
+  ForbiddenException,
+  Req,
 } from '@nestjs/common';
+import { Request } from 'express';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
-import { CreateUserDto } from './dtos/input/create-user-dto';
 import { UpdateUserDto } from './dtos/input/update-user-dto';
 import { Auth } from 'src/common/decorators/auth-decorator';
+import { UserRoles } from 'src/common/enums/user-roles';
 
 @Controller('users')
 export class UsersGatewayController {
-  constructor(private readonly httpService: HttpService) {}
+  constructor(private readonly httpService: HttpService) { }
 
   @Get()
   async getUsers() {
@@ -34,20 +36,23 @@ export class UsersGatewayController {
     return response.data;
   }
 
-  @Post()
-  @Auth(['ADMIN'])
-  async createUser(@Body() createDto: CreateUserDto) {
-    const response = await firstValueFrom(
-      this.httpService.post(
-        `${process.env.USERS_SERVICE_URL}/users`,
-        createDto,
-      ),
-    );
-    return response.data;
-  }
-
   @Put(':id')
-  async updateUser(@Param('id') id: string, @Body() updateDto: UpdateUserDto) {
+  @Auth()
+  async updateUser(
+    @Param('id') id: string,
+    @Body() updateDto: UpdateUserDto,
+    @Req() request,
+  ) {
+    const isAdmin = request.user.roles.includes(UserRoles.ADMIN);
+  
+    const isUpdatingOwnProfile = request.user.id === id;
+
+    if (!isAdmin && !isUpdatingOwnProfile) {
+      throw new ForbiddenException(
+        'Você só pode atualizar o próprio perfil.',
+      );
+    }
+
     const response = await firstValueFrom(
       this.httpService.put(
         `${process.env.USERS_SERVICE_URL}/users/${id}`,
