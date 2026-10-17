@@ -10,6 +10,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './common/strategies/jwt-strategy';
 import { ProductsStockService } from './gateways/products/products-stock.service';
 import { StockGatewayController } from './gateways/stock/stock.gateway.controller';
+import { OrdersGatewayController } from './gateways/orders/orders.gateway.controller';
+import { PaymentsGatewayController } from './gateways/payments/payments.gateway.controller';
 @Module({
   imports: [
     HttpModule,
@@ -26,6 +28,8 @@ import { StockGatewayController } from './gateways/stock/stock.gateway.controlle
     CategoriesGatewayController,
     UsersGatewayController,
     StockGatewayController,
+    OrdersGatewayController,
+    PaymentsGatewayController,
   ],
   providers: [JwtStrategy, ProductsStockService],
 })

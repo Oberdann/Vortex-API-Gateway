@@ -13,6 +13,19 @@ import { AxiosErrorInterceptor } from './common/filters/axios-error-interceptor'
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  const corsOrigins = (process.env.FRONTEND_ORIGINS ?? '')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+    
+  if (corsOrigins.length > 0) {
+    app.enableCors({
+      origin: corsOrigins,
+      methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'Authorization', 'X-Idempotency-Key'],
+    });
+  }
+
   app.setGlobalPrefix('api/v1');
 
   app.useGlobalPipes(
